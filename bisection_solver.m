@@ -1,26 +1,16 @@
 %Bisection function
 
 function guess = bisection_solver(fun,x_left,x_right)
-%your code here
-guess = (x_left + x_right)/2;
-lastguess = x_left;
-Bthresh = 10e-14;
-Athresh = 10e-14;
-
-while (abs(lastguess - guess) > Athresh && abs(fun(guess)) > Bthresh)
-
+    guess = (x_left + x_right)/2;
+    Bthresh = 10e-14; % Threshold for min distance from zero
+    Athresh = 10e-14; % Threshold for min window size
     
-    if fun(x_left) * fun(guess) > 0
-
-       x_left = guess;
-
-     else 
-
-      x_right = guess;
-
-    end 
-   
-   lastguess = guess;
-   guess = (x_left + x_right)/2;
-
+    while (abs(x_right - x_left) > Athresh && abs(fun(guess)) > Bthresh)
+        if fun(x_left) * fun(guess) > 0 % If the signs match (and neither number is zero)
+            x_left = guess; % The zero must be in the right half
+        else
+            x_right = guess; % The zero must be in the left half (including the left bound)
+        end
+        guess = (x_left + x_right)/2;
+    end
 end
