@@ -1,6 +1,11 @@
 %Bisection function
 
 function guess = bisection_solver(fun,x_left,x_right)
+    
+    if fun(x_left) * fun(x_right) > 0
+        error('Interval may not contain a zero. Bounds must be of opposite signs.')
+    end
+
     guess = (x_left + x_right)/2;
     Bthresh = 10e-14; % Threshold for min distance from zero
     Athresh = 10e-14; % Threshold for min window size

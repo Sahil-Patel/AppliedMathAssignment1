@@ -17,3 +17,7 @@ xlabel("x")
 ylabel("f(x)")
 title('Bisection')
 ylim([-50 100])
+
+zero_newton = newton_solver(test_func01, test_derivative01, 35);
+scatter(zero_newton, 0);
+
