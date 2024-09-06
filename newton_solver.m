@@ -5,14 +5,15 @@ function x = newton_solver(fun,derivative,x0)
 
     while 1
         last_x = x;
-        x = x - fun(x)/derivative(x);
-        if (abs(x - last_x) < Athresh && abs(fun(x)) < Bthresh)
+        y = fun(x);
+        x = x - y/derivative(x);
+        if (abs(x - last_x) < Athresh && abs(y) < Bthresh)
             break
         end
         if (derivative(x) < 10e-10)
             break
         end
-        if (fun(x)/derivative(x) > 10e6)
+        if (y/derivative(x) > 10e6)
             break
         end
     end

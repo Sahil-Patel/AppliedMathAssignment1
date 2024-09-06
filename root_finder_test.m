@@ -14,6 +14,7 @@ num_iter = 1000;
 %because the root is somewhere between -5 and 5.
 x_left_list = linspace(-10,-5,num_iter);
 x_right_list = linspace(5,25,num_iter);
+guess_list = linspace(-3,3,num_iter);
 % Initialize lists to store x and index values
 bisection_xn = [];
 bisection_xn1 = [];
@@ -43,7 +44,7 @@ end
 % Loop newton solver
 for n = 1:num_iter
     % pull out the left and right guess for the trial
-    x_guess = x_left_list(n);
+    x_guess = guess_list(n);
     % clear the input_list global variable
     input_list = [];
     % run the newton solver
