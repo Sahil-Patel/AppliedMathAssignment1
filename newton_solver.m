@@ -9,5 +9,11 @@ function x = newton_solver(fun,derivative,x0)
         if (abs(x - last_x) < Athresh && abs(fun(x)) < Bthresh)
             break
         end
+        if (derivative(x) < 10e-10)
+            break
+        end
+        if (fun(x)/derivative(x) > 10e6)
+            break
+        end
     end
 end
