@@ -1,56 +1,69 @@
 clear all
 close all
 clc
+
+%define location and filename where video will be stored
+%written a bit weird to make it fit when viewed in assignment
+fname = '/Users/vaughn/Documents/School/Applied Math/egg2.avi';
+writerObj = VideoWriter(fname);
+open(writerObj);
+
 %set the oval hyper-parameters
 egg_params = struct();
 egg_params.a = 3; egg_params.b = 2; egg_params.c = .15;
-%specify the position and orientation of the egg
-x0 = 5; y0 = 5; theta = 0;
-%set up the axis
+
+x_wall = 30;
+y_ground = 3;
+
+%set up the plotting axis
+fig1 = figure(1);
 hold on; axis equal; axis square
-axis([0,10,0,10])
-%plot the origin of the egg frame
-plot(x0,y0,'ro','markerfacecolor','r');
-%compute the perimeter of the egg
-[V_list, G_list] = egg_func(linspace(0,1,100),x0,y0,theta,egg_params);
-%plot the perimeter of the egg
-plot(V_list(1,:),V_list(2,:),'k'); hold on
+axis([0,40,0,40])
+egg_plot = plot(0,0,'k');
 
-% look for zeros using 3 ranges to make sure both are captured
-for egg_axis = 1:2
-    grad_wrapper = @(s) egg_grad(s,x0,y0,theta,egg_params,egg_axis);
-    for i = 1:3
-        all_zeros(i,egg_axis) = secant_solver(grad_wrapper, (i-1)/3, i/3);
-        all_zeros(i,egg_axis) = mod(all_zeros(i,egg_axis),1);
-    end
-    zeros(1,egg_axis) = min(all_zeros(:,egg_axis));
-    zeros(2,egg_axis) = max(all_zeros(:,egg_axis));
+t_collision = collision_func(@egg_trajectory01, egg_params, y_ground, x_wall);
+
+xline(x_wall);
+yline(y_ground);
+
+for t = 0:0.005:min(t_collision)
+    [x0,y0,theta] = egg_trajectory01(t);
+    [V_list, G_list] = egg_func(linspace(0,1,50),x0,y0,theta,egg_params);
+    set(egg_plot,'xdata',V_list(1,:),'ydata',V_list(2,:));
+
+    drawnow;
+    %capture a frame (what is currently plotted)
+    current_frame = getframe(fig1);
+    %write the frame to the video
+    writeVideo(writerObj,current_frame);
 end
 
-for egg_axis = 1:2
-    for i = 1:2
-        s_bound = zeros(i,egg_axis);
-        [V,G] = egg_func(s_bound,x0,y0,theta,egg_params);
-        bounds(i,egg_axis) = V(egg_axis);
-    end
+hit_floor = t_collision(1) > t_collision(2);
+bounds = egg_bounds(x0,y0,theta,egg_params);
+if hit_floor
+    hit_point = bounds(1,2,:);
+else
+    hit_point = bounds(2,1,:);
 end
 
-for i=1:2
-    xline(bounds(i,1));
-    yline(bounds(i,2));
+scatter(hit_point(1), hit_point(2));
+pause(2);
+
+%capture a frame (what is currently plotted)
+current_frame = getframe(fig1);
+%write the frame to the video
+for i = 1:30
+    writeVideo(writerObj,current_frame);
 end
 
-grad_wrapper = @(s) egg_grad(s,x0,y0,theta,egg_params,2);
-x_grad_samples = grad_wrapper(linspace(0,1,100));
-figure()
-plot(linspace(0,1,100),x_grad_samples); hold on
-scatter(zeros(:,2),0)
+close(writerObj);
 
-% axis = 1 for x and 2 for y
-function g_out = egg_grad(s,x0,y0,theta,egg_params,egg_axis)
-    [V,G] = egg_func(s,x0,y0,theta,egg_params);
-    g_out = G(egg_axis,:);
+function [x0,y0,theta] = egg_trajectory01(t)
+    x0 = 10*t;
+    y0 = -6*t.^2 + 20*t + 10;
+    theta = 2*t;
 end
+
 
 
 
