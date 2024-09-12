@@ -4,8 +4,8 @@ function guess = secant_solver(fun,x0,x1)
 %your code here
 y0 = (fun(x0));
 y1 = (fun(x1));
-Bthresh = 10e-14;
-Athresh = 10e-14;
+Bthresh = 1e-14;
+Athresh = 1e-14;
 
 max_iter = 50;
 delta_x = 10;

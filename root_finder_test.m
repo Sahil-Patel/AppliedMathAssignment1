@@ -15,6 +15,8 @@ num_iter = 1000;
 x_left_list = linspace(-10,-5,num_iter);
 x_right_list = linspace(5,25,num_iter);
 guess_list = linspace(-3,3,num_iter);
+x_0_list = linspace(-5,5, num_iter);
+x_1_list = x_0_list + 1;
 % Initialize lists to store x and index values
 bisection_xn = [];
 bisection_xn1 = [];
@@ -25,7 +27,9 @@ newton_index = [];
 secant_xn = [];
 secant_xn1 = [];
 secant_index = [];
-
+fzero_xn = [];
+fzero_xn1 = [];
+fzero_index = [];
 %Loop for bisection solver
 for n = 1:num_iter
     %pull out the left and right guess for the trial
@@ -58,8 +62,8 @@ end
 %Loop for secant solver
 for n = 1:num_iter
     %pull out the left and right guess for the trial
-    x_left = x_left_list(n);
-    x_right = x_right_list(n);
+    x_left = x_1_list(n);
+    x_right = x_0_list(n);
     %clear the input_list global variable
     input_list = [];
     %run the bisection solver
@@ -69,6 +73,20 @@ for n = 1:num_iter
     secant_xn1 = [secant_xn1,input_list(2:end)];
     secant_index = [secant_index,1:length(input_list)-1];
 end
+%Loop for fzero
+for n = 1:num_iter
+    %pull out the left and right guess for the trial
+    x_guess = guess_list(n);
+    %clear the input_list global variable
+    input_list = [];
+    %run the bisection solver
+    fzero(@test_function01,x_guess);
+    % Store the test data
+    fzero_xn = [fzero_xn,input_list(1:end-1)];
+    fzero_xn1 = [fzero_xn1,input_list(2:end)];
+    fzero_index = [fzero_index,1:length(input_list)-1];
+end
+
 
 % Generate error lists
 bisection_err_xn = abs(bisection_xn - root_accurate);
@@ -80,6 +98,9 @@ newton_err_xn1 = abs(newton_xn1 - root_accurate);
 secant_err_xn = abs(secant_xn - root_accurate);
 secant_err_xn1 = abs(secant_xn1 - root_accurate);
 
+fzero_err_xn = abs(fzero_xn - root_accurate);
+fzero_err_xn1 = abs(fzero_xn1 - root_accurate);
+
 loglog(bisection_err_xn,bisection_err_xn1,'ro','markerfacecolor','r','markersize',1);
 title('Bisection')
 figure()
@@ -88,6 +109,9 @@ title('Newton')
 figure()
 loglog(secant_err_xn,secant_err_xn1,'ro','markerfacecolor','g','markersize',1);
 title('Secant')
+figure()
+loglog(fzero_err_xn,fzero_err_xn1,'ro','markerfacecolor','g','markersize',1);
+title('fzero')
 
 
 function output = test_function01(x)
@@ -100,4 +124,3 @@ function output = test_function01(x)
     %perform the rest of the computation to generate output %I just put in a quadratic function as an example output = (x-3).*(x-7);
     output = (x.^3)/100 - (x.^2)/8 + 2*x + 6*sin(x/2+6) -.7 - exp(x/6);
 end
-

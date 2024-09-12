@@ -9,8 +9,8 @@ function guess = bisection_solver(fun,x_left,x_right)
     end
 
     guess = (x_left + x_right)/2;
-    Bthresh = 10e-14; % Threshold for min distance from zero
-    Athresh = 10e-14; % Threshold for min window size
+    Bthresh = 1e-14; % Threshold for min distance from zero
+    Athresh = 1e-14; % Threshold for min window size
     
     while (abs(x_right - x_left) > Athresh && abs(fun(guess)) > Bthresh)
         y_guess = fun(guess);
