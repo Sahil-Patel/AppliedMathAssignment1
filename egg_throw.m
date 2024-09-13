@@ -26,7 +26,7 @@ t_collision = collision_func(@egg_trajectory01, egg_params, y_ground, x_wall);
 xline(x_wall);
 yline(y_ground);
 
-for t = 0:0.005:min(t_collision)
+for t = 0:0.01:min(t_collision)
     [x0,y0,theta] = egg_trajectory01(t);
     [V_list, G_list] = egg_func(linspace(0,1,50),x0,y0,theta,egg_params);
     set(egg_plot,'xdata',V_list(1,:),'ydata',V_list(2,:));
@@ -59,7 +59,7 @@ end
 close(writerObj);
 
 function [x0,y0,theta] = egg_trajectory01(t)
-    x0 = 10*t;
+    x0 = 5*t;
     y0 = -6*t.^2 + 20*t + 10;
     theta = 2*t;
 end
