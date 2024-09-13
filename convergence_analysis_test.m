@@ -7,7 +7,7 @@ num_iter = 1000;
 test_derivative01 = @(x) 3*(x.^2)/100 - 2*x/8 + 2 +(6/2)*cos(x/2+6) - exp(x/6)/6;
 root_accurate = newton_solver(@test_function01,test_derivative01,0);
 
-Convergence_Analysis(1,@test_function01,test_derivative01,root_accurate,linspace(-10,-5,num_iter), linspace(5,25,num_iter), [1e-12, 1e-3, 1e-12, 1e-3, 3])
+Convergence_Analysis(1,@test_function01,test_derivative01,root_accurate,linspace(-10,-5,num_iter), linspace(5,25,num_iter), [0, 1, 0, 1, 3])
 Convergence_Analysis(2,@test_function01,test_derivative01,root_accurate,linspace(-3,3,num_iter), 0, [1e-6, 1e-1, 1e-12, 1e-4, 3])
 Convergence_Analysis(3,@test_function01,test_derivative01,root_accurate,linspace(-5,5, num_iter), linspace(-5,5, num_iter)+1, [1e-8, 1e-1, 1e-12, 1e-4, 3])
 Convergence_Analysis(4,@test_function01,test_derivative01,root_accurate,linspace(-3,3,num_iter), 0, [1e-6, 1e-1, 1e-12, 1e-4, 3])

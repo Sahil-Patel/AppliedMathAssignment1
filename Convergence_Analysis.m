@@ -29,7 +29,8 @@ function Convergence_Analysis(solver_flag, fun, derivative, root_accurate, guess
         input_list = [];
         %run the bisection solver
         if solver_flag == 1
-            bisection_solver(fun,x_0,x_1);
+            [~,bad_guesses] = bisection_solver(fun,x_0,x_1);
+            input_list = bad_guesses;
         elseif solver_flag == 2
             newton_solver(fun, derivative, x_0);
         elseif solver_flag == 3
