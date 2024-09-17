@@ -10,7 +10,7 @@
 % if guess_list2 is not needed, then set to zero in input
 %filter_list: a list of constants used to filter the collected data
 % filter_list = [x_lower, x_upper, x+1_lower, x+1_upper, first_iter]
-function Convergence_Analysis(solver_flag, fun, derivative, root_accurate, guess_list1, guess_list2, filter_list)
+function convergence_analysis(solver_flag, fun, derivative, root_accurate, guess_list1, guess_list2, filter_list)
 
     %declare input_list as a global variable
     global input_list;
